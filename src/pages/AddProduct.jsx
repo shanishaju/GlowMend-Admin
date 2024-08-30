@@ -1,7 +1,62 @@
 import { Button, Stack, TextField } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
+import { addProductApi } from '../services/allApi';
 
 function AddProduct() {
+
+    const [productDetails, setProductDetails] = useState({
+        productName: "",
+        category: "",
+        price: "",
+        description: "",
+        productImage: ""
+    })
+    console.log(productDetails);
+    const imageHandler = (e) => {
+        console.log(e.target.files[0]);
+        setProductDetails({ ...productDetails, productImage: e.target.files[0] })
+
+    }
+
+    //cancel button
+    const handleCancel = () => {
+        setProductDetails({
+            productName: "",
+            category: "",
+            price: "",
+            description: "",
+            productImage: ""
+        })
+    }
+    //add button
+    const handleAdd = async (e) => {
+        e.preventDefault()
+        const { productName, category, price, description, productImage } = productDetails
+        if (!productName || !category || !price || !description || !productImage) {
+            alert("Please fill the fields completely")
+        }
+        else {
+            //api call 
+            //formData-- in order to send uploaded content use formData class
+            //append-- to add data to object
+            const reqBody = new FormData()
+
+            reqBody.append("productName", productName)
+            reqBody.append("category", category)
+            reqBody.append("price", price)
+            reqBody.append("description", description)
+            reqBody.append("productImage", productImage)
+
+            const reqHeader = {
+                "Content-Type":"multipart/form-data"
+            }
+
+            const result = await addProductApi(reqBody,reqHeader)
+            console.log(result);
+            
+
+        }
+    }
     return (
         <>
             <div className='ms-5 me-5 rounded-4 ' style={{ width: "80%", backgroundColor: "", height: "79vh", padding: "0px 30px" }}>
@@ -24,19 +79,19 @@ function AddProduct() {
                         >
 
                             <Stack sx={{ width: "49%", marginBottom: "2%" }}>
-                                <TextField id="outlined-basic" label="Product Name" variant="outlined" color="blue" name="name" />
+                                <TextField id="outlined-basic" label="Product Name" variant="outlined" color="blue" name="name" value={productDetails.productName} onChange={(e) => setProductDetails({ ...productDetails, productName: e.target.value })} />
                             </Stack>
 
                             <Stack sx={{ width: "49%", marginBottom: "2%" }}>
-                                <TextField id="outlined-basic" label="Category" variant="outlined" color="blue" name="category" />
+                                <TextField id="outlined-basic" label="Category" variant="outlined" color="blue" name="category" value={productDetails.category} onChange={(e) => setProductDetails({ ...productDetails, category: e.target.value })} />
                             </Stack>
 
                             <Stack sx={{ width: "49%", marginBottom: "2%" }}>
-                                <TextField id="outlined-basic" label="$ Price" variant="outlined" color="blue" name="category" />
+                                <TextField id="outlined-basic" label="$ Price" variant="outlined" color="blue" name="category" value={productDetails.price} onChange={(e) => setProductDetails({ ...productDetails, price: e.target.value })} />
                             </Stack>
 
                             <Stack sx={{ width: "49%", marginBottom: "2%" }}>
-                                <TextField id="outlined-basic" label="Description" variant="outlined" color="blue" name="description" />
+                                <TextField id="outlined-basic" label="Description" variant="outlined" color="blue" name="description" value={productDetails.description} onChange={(e) => setProductDetails({ ...productDetails, description: e.target.value })} />
                             </Stack>
 
                             <Stack sx={{ flexDirection: "row" }}>
@@ -61,11 +116,13 @@ function AddProduct() {
                                         />
                                     </label>
                                     <input
+                                        value={productDetails.productImage}
                                         // onChange={imageHandler}
                                         type="file"
                                         name="image"
                                         id="file-upload"
                                         hidden
+                                        onChange={(e) => imageHandler(e)}
                                     />
                                 </Stack>
                             </Stack>
@@ -80,6 +137,25 @@ function AddProduct() {
                             >
                                 <Button
                                     variant="contained"
+                                    onClick={handleAdd}
+                                    sx={{
+
+                                        widht: "auto",
+                                        backgroundColor: "white",
+                                        color: "#000",
+                                        padding: "15px 30px",
+                                        display: "flex",
+                                        "&:hover": {
+                                            backgroundColor: "#000",
+                                            color: "#fff",
+                                        },
+                                    }}
+                                >
+                                    Add
+                                </Button>
+                                <Button className='ms-4'
+                                    onClick={handleCancel}
+                                    variant="contained"
                                     sx={{
 
                                         widht: "auto",
@@ -92,7 +168,7 @@ function AddProduct() {
                                         },
                                     }}
                                 >
-                                    Add Product
+                                    Drop
                                 </Button>
                             </Stack>
                         </Stack>
