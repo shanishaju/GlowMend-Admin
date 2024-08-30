@@ -38,28 +38,37 @@ function AddProduct() {
                             <Stack sx={{ width: "49%", marginBottom: "2%" }}>
                                 <TextField id="outlined-basic" label="Description" variant="outlined" color="blue" name="description" />
                             </Stack>
-                               
-                               <Stack sx={{flexDirection:"row"}}>
 
-                                
-                            <Stack sx={{ width: "220%", marginBottom: "2%", flexDirection: "row", justifyContent:"right", backgroundColor:"#a3706b96" ,borderRadius:"10px" }} >
-                                <label htmlFor="file-upload" style={{ cursor: "pointer" }}>
-                                    <img className='m-3'
-                                        src="../src/assets/uploadRemovebg.png"
-                                        alt="addproduct-thumbnail"
-                                        // className={classes.fileUploadThumbnail}
-                                        width="30%"
+                            <Stack sx={{ flexDirection: "row" }}>
+
+
+                                <Stack sx={{ width: "220%", marginBottom: "2%", flexDirection: "row", justifyContent: "right", backgroundColor: "#a3706b96", borderRadius: "10px" }} >
+                                    <label
+                                        htmlFor="file-upload"
+                                        style={{
+                                            cursor: "pointer",
+                                            width: "200px",
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                        }}
+                                    >
+                                        <img
+                                            className="m-4"
+                                            src="../src/assets/uploadRemovebg.png"
+                                            alt="addprodut-thumbnail"
+                                            width="30%"
+                                        />
+                                    </label>
+                                    <input
+                                        // onChange={imageHandler}
+                                        type="file"
+                                        name="image"
+                                        id="file-upload"
+                                        hidden
                                     />
-                                </label>
-                                <input
-                                    // onChange={imageHandler}
-                                    type="file"
-                                    name="image"
-                                    id="file-upload"
-                                    hidden
-                                />
+                                </Stack>
                             </Stack>
-                               </Stack>
 
 
                             <Stack

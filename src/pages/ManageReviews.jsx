@@ -1,6 +1,9 @@
-import React from 'react'
+import React from 'react';
+
 
 function ManageReviews() {
+
+
     return (
         <>
             <div className='ms-5 me-5 rounded-4 ' style={{ width: "80%", backgroundColor: "#a3706b96", height: "79vh" }}>
