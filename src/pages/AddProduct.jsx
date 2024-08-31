@@ -9,13 +9,14 @@ function AddProduct() {
         category: "",
         price: "",
         description: "",
-        productImage: ""
-    })
+        productImage: null // Change to null to avoid confusion
+    });
+
     console.log(productDetails);
+
     const imageHandler = (e) => {
         console.log(e.target.files[0]);
-        setProductDetails({ ...productDetails, productImage: e.target.files[0] })
-
+        setProductDetails({ ...productDetails, productImage: e.target.files[0] });
     }
 
     //cancel button
@@ -25,38 +26,35 @@ function AddProduct() {
             category: "",
             price: "",
             description: "",
-            productImage: ""
-        })
+            productImage: null // Reset to null
+        });
     }
+
     //add button
     const handleAdd = async (e) => {
-        e.preventDefault()
-        const { productName, category, price, description, productImage } = productDetails
+        e.preventDefault();
+        const { productName, category, price, description, productImage } = productDetails;
         if (!productName || !category || !price || !description || !productImage) {
-            alert("Please fill the fields completely")
-        }
-        else {
-            //api call 
-            //formData-- in order to send uploaded content use formData class
-            //append-- to add data to object
-            const reqBody = new FormData()
+            alert("Please fill the fields completely");
+        } else {
+            const reqBody = new FormData();
 
-            reqBody.append("productName", productName)
-            reqBody.append("category", category)
-            reqBody.append("price", price)
-            reqBody.append("description", description)
-            reqBody.append("productImage", productImage)
+            reqBody.append("productName", productName);
+            reqBody.append("category", category);
+            reqBody.append("price", price);
+            reqBody.append("description", description);
+            reqBody.append("productImage", productImage);
 
             const reqHeader = {
-                "Content-Type":"multipart/form-data"
+                "Content-Type": "multipart/form-data"
             }
 
-            const result = await addProductApi(reqBody,reqHeader)
+            const result = await addProductApi(reqBody, reqHeader);
             console.log(result);
-            
-
+            alert("Product added successfully")
         }
     }
+
     return (
         <>
             <div className='ms-5 me-5 rounded-4 ' style={{ width: "80%", backgroundColor: "", height: "79vh", padding: "0px 30px" }}>
@@ -95,8 +93,6 @@ function AddProduct() {
                             </Stack>
 
                             <Stack sx={{ flexDirection: "row" }}>
-
-
                                 <Stack sx={{ width: "220%", marginBottom: "2%", flexDirection: "row", justifyContent: "right", backgroundColor: "#a3706b96", borderRadius: "10px" }} >
                                     <label
                                         htmlFor="file-upload"
@@ -116,17 +112,14 @@ function AddProduct() {
                                         />
                                     </label>
                                     <input
-                                        value={productDetails.productImage}
-                                        // onChange={imageHandler}
+                                        onChange={(e) => imageHandler(e)}
                                         type="file"
                                         name="image"
                                         id="file-upload"
                                         hidden
-                                        onChange={(e) => imageHandler(e)}
                                     />
                                 </Stack>
                             </Stack>
-
 
                             <Stack
                                 sx={{
@@ -139,8 +132,7 @@ function AddProduct() {
                                     variant="contained"
                                     onClick={handleAdd}
                                     sx={{
-
-                                        widht: "auto",
+                                        width: "auto",
                                         backgroundColor: "white",
                                         color: "#000",
                                         padding: "15px 30px",
@@ -157,8 +149,7 @@ function AddProduct() {
                                     onClick={handleCancel}
                                     variant="contained"
                                     sx={{
-
-                                        widht: "auto",
+                                        width: "auto",
                                         backgroundColor: "white",
                                         color: "#000",
                                         padding: "15px 30px",
@@ -173,15 +164,10 @@ function AddProduct() {
                             </Stack>
                         </Stack>
                     </Stack>
-
-
-
-
-
                 </Stack>
             </div >
         </>
-    )
+    );
 }
 
-export default AddProduct
+export default AddProduct;
