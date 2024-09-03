@@ -51,7 +51,13 @@ function AddProduct() {
 
             const result = await addProductApi(reqBody, reqHeader);
             console.log(result);
-            alert("Product added successfully")
+            if(result.status == 200){
+                alert("Data added successfully")
+                handleCancel()
+            }
+            else{
+                alert("Failed to add data")
+            }
         }
     }
 

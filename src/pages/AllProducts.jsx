@@ -1,22 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { Stack, TextField } from '@mui/material';
+import {  Stack, TextField } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
-import img1 from '../assets/skin-oil5.jpg'
-import img2 from '../assets/skin-oil1.jpg'
-import img3 from '../assets/skin-oil6.jpg'
-import img4 from '../assets/skin-oil-3.jpg'
+import { allProductApi } from '../services/allApi';
+import { serverUrl } from '../services/serverUrl';
 
 
 
 
 
 function AllProducts() {
+    //show
+    const [allProducts, setAllProducts] = useState([])
+
+
+    //get products
+    const getHomeProducts = async () => {
+        const result = await allProductApi()
+        setAllProducts(result.data);
+    }
 
     //modal start
     const [open, setOpen] = React.useState(false);
@@ -26,9 +33,12 @@ function AllProducts() {
     const handleClose = () => {
         setOpen(false);
     };
-    //modal end    
+
+    getHomeProducts()
+    //modal end  
+
     return (
-        <div className='ms-5 me-5 rounded-4 ' style={{ width: "80%", backgroundColor: "", height: "79vh" }}>
+        <div className='ms-5 me-5 rounded-4 ' style={{ width: "80%", backgroundColor: "", height: "auto" }}>
             <Stack>
                 <Stack
                     sx={{
@@ -39,84 +49,58 @@ function AllProducts() {
                 >
                     <p className='text-light ms-4 mt-3' style={{ fontSize: "32px", fontWeight: "bold" }} >All Products</p>
 
-                    <Stack 
+                    <Stack
                         sx={{
                             flexDirection: "row",
                             padding: "30px",
+                            flexWrap: "wrap",
 
                         }}>
-                        <Card sx={{
-                            maxWidth: 250, marginRight: "20px"
-                        }}>
-                            <CardMedia
-                                sx={{ height: 150 }}
-                                image={img1}
-                                title="img1 "
-                            />
-                            <CardContent style={{ backgroundColor: "#a3706b96" }}>
-                                <Typography gutterBottom variant="h6" component="div">
-                                    Eucalyptus Oil
-                                </Typography>
-                            </CardContent>
-                            <CardActions style={{ backgroundColor: "#a3706b96" }}>
-                                <Button size="small" className='me-4 text-light' onClick={handleOpen} >Edit</Button>
-                                <Button size="small" className='p-1 text-light' >Delete</Button>
-                            </CardActions>
-                        </Card>
+                        {/* conditinaly rendering card */}
+                        {allProducts?.length > 0 ?
+                            allProducts?.map((item) => (
+                                <Card
+                                    sx={{
+                                        maxWidth: 250, marginRight: "20px", marginTop: "10px"
+                                    }}>
+                                    <CardMedia
+                                        sx={{ height: 150 }}
+                                        image={`${serverUrl}/uploads/${item.productImage}`}
+                                        title="img1 "
+                                    />
+                                    <CardContent style={{ backgroundColor: "#a3706b96" }}>
+                                        <Typography gutterBottom variant="h6" component="div"
+                                            sx={{ textAlign: "center" }}
+>
+                                            {item.productName}
+                                        </Typography>
+                                        <Typography variant="body1" component="p"  sx={{ textAlign: "center" }}
+                                        > 
+                                                ${item.price}
+                                            </Typography>
+                                        {/* <Typography variant="body2" color="textSecondary" component="p">
+                                            {item.description}
+                                        </Typography> */}
+                                        {/* <Box display="flex" justifyContent="space-between">
+                                            <Typography variant="body2" color="textSecondary" component="p">
+                                             {item.category}
+                                            </Typography>
+                                            <Typography variant="body1" component="p">
+                                                ${item.price}
+                                            </Typography>
+                                        </Box> */}
 
-                        <Card sx={{ maxWidth: 250, marginRight: "20px" }}>
-                            <CardMedia
-                                sx={{ height: 150 }}
-                                image={img2}
-                                title="img1 "
-                            />
-                            <CardContent style={{ backgroundColor: "#a3706b96" }}>
-                                <Typography gutterBottom variant="h6" component="div">
-                                    Lemon Oil
-                                </Typography>
-                            </CardContent>
-                            <CardActions style={{ backgroundColor: "#a3706b96" }}>
-                                <Button size="small" className='me-4 text-light' onClick={handleOpen} >Edit</Button>
-                                <Button size="small" className='p-1 text-light' >Delete</Button>
-                            </CardActions>
-                        </Card>
 
-                        <Card sx={{ maxWidth: 250, marginRight: "20px" }}>
-                            <CardMedia
-                                sx={{ height: 150 }}
-                                image={img3}
-                                title="img1 "
-                            />
-                            <CardContent style={{ backgroundColor: "#a3706b96" }}>
-                                <Typography gutterBottom variant="h6" component="div">
-                                    Lavender Oil
-                                </Typography>
-                            </CardContent>
-                            <CardActions style={{ backgroundColor: "#a3706b96" }}>
-                                <Button size="small" className='me-4 text-light' onClick={handleOpen}>Edit</Button>
-                                <Button size="small" className='p-1 text-light' >Delete</Button>
-                            </CardActions>
-                        </Card>
+                                    </CardContent>
+                                    <CardActions style={{ backgroundColor: "#a3706b96" }}>
+                                        <Button size="small" className='me-4 text-light' onClick={handleOpen} >Edit</Button>
+                                        <Button size="small" className='p-1 text-light' >Delete</Button>
+                                    </CardActions>
+                                </Card>
+                            ))
+                            : null
+                        }
 
-                        <Card sx={{ maxWidth: 250, marginRight: "20px" }}>
-                            <CardMedia
-                                sx={{ height: 150 }}
-                                image={img4}
-                                title="img1 "
-                            />
-                            <CardContent style={{ backgroundColor: "#a3706b96" }}>
-                                <Typography gutterBottom variant="h6" component="div">
-                                    Oregano Oil
-                                </Typography>
-                            </CardContent>
-                            <CardActions style={{ backgroundColor: "#a3706b96" }}>
-                                <Button size="small" className='me-4 text-light' onClick={handleOpen}>Edit</Button>
-
-                                <Button size="small" className='p-1 text-light' >Delete</Button>
-
-                            </CardActions>
-                        </Card>
-                        
                         <Modal
                             open={open}
                             onClose={handleClose}

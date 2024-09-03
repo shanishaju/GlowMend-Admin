@@ -9,3 +9,9 @@ import { serverUrl } from "./serverUrl"
 export const addProductApi = async(reqBody, reqHeader)=>{
     return await commonApi('POST',`${serverUrl}/addproduct`,reqBody,reqHeader)
 }
+
+
+//get product api
+export const allProductApi = async()=>{
+    return await commonApi('GET',`${serverUrl}/allproducts`,"","")
+}
