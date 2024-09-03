@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -25,6 +25,8 @@ function AllProducts() {
         setAllProducts(result.data);
     }
 
+
+
     //modal start
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => {
@@ -33,8 +35,9 @@ function AllProducts() {
     const handleClose = () => {
         setOpen(false);
     };
-
-    getHomeProducts()
+    useEffect(() => {
+        getHomeProducts()
+    }, []); 
     //modal end  
 
     return (
