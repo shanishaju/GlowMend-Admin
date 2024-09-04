@@ -4,7 +4,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import {  Stack, TextField } from '@mui/material';
+import { ListItemIcon, selectClasses, Stack, TextField } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import { allProductApi, deleteProductApi } from '../services/allApi';
@@ -20,17 +20,14 @@ function AllProducts() {
     const [deleteStatus, setDeleteStatus] = useState(false) //auto refresh
 
 
+
     //get products
     const getHomeProducts = async () => {
         const result = await allProductApi()
         setAllProducts(result.data);
     }
-
-   
-
-
     //modal start
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false)
     const handleOpen = () => {
         setOpen(true);
     };
@@ -38,13 +35,21 @@ function AllProducts() {
         setOpen(false);
     };
 
-     //delete products
-     const handleDelete =async(id)=>{
+    //delete products
+    const handleDelete = async (id) => {
         const result = await deleteProductApi(id)
-        console.log(result);
-        if(result.status ==200){
+        if (result.status == 200) {
             setDeleteStatus(true)
         }
+
+
+    }
+
+    //edit
+    const [edit, setEdit] = useState()
+    const handleEdit = (selectedItem) => {
+        setEdit(selectedItem)
+        console.log(selectedItem);
         
 
     }
@@ -53,7 +58,8 @@ function AllProducts() {
         getHomeProducts()
         setDeleteStatus(false) //refresh
 
-    }, [deleteStatus]); 
+
+    }, [deleteStatus]);
     //modal end  
 
     return (
@@ -79,6 +85,7 @@ function AllProducts() {
                         {allProducts?.length > 0 ?
                             allProducts?.map((item) => (
                                 <Card
+                                    key={item.id}
                                     sx={{
                                         maxWidth: 250, marginRight: "20px", marginTop: "10px"
                                     }}>
@@ -90,13 +97,13 @@ function AllProducts() {
                                     <CardContent style={{ backgroundColor: "#a3706b96" }}>
                                         <Typography gutterBottom variant="h6" component="div"
                                             sx={{ textAlign: "center" }}
->
+                                        >
                                             {item.productName}
                                         </Typography>
-                                        <Typography variant="body1" component="p"  sx={{ textAlign: "center" }}
-                                        > 
-                                                ${item.price}
-                                            </Typography>
+                                        <Typography variant="body1" component="p" sx={{ textAlign: "center" }}
+                                        >
+                                            ${item.price}
+                                        </Typography>
                                         {/* <Typography variant="body2" color="textSecondary" component="p">
                                             {item.description}
                                         </Typography> */}
@@ -112,8 +119,8 @@ function AllProducts() {
 
                                     </CardContent>
                                     <CardActions style={{ backgroundColor: "#a3706b96" }}>
-                                        <Button size="small" type='button' className='me-4 text-light' onClick={handleOpen} >Edit</Button>
-                                        <Button size="small" type='button' className='p-1 text-light' onClick={()=>handleDelete(item?._id)} >Delete</Button>
+                                        <Button size="small" type='button' className='me-4 text-light' onClick={()=>{handleEdit(item); handleOpen()}}  >Edit</Button>
+                                        <Button size="small" type='button' className='p-1 text-light' onClick={() => handleDelete(item?._id)} >Delete</Button>
                                     </CardActions>
                                 </Card>
                             ))
@@ -127,10 +134,9 @@ function AllProducts() {
                             aria-describedby="parent-modal-description"
                         >
 
-
-                            <Stack className='hii'
+                            <Stack
                                 sx={{
-                                    backgroundColor: "",
+                                    backgroundColor: " #76453f",
                                     padding: "30px",
                                     borderRadius: "12px",
                                     position: 'absolute',
@@ -143,6 +149,7 @@ function AllProducts() {
                                     pt: 2,
                                     px: 4,
                                     pb: 3,
+                                    
                                 }}
                             >
                                 <p className='text-light ms-4 mt-3' style={{ fontSize: "32px", fontWeight: "bold" }} >Update Product</p>
@@ -154,9 +161,9 @@ function AllProducts() {
                                         justifyContent: "space-between",
                                     }}
                                 >
-
+ 
                                     <Stack sx={{ width: "49%", marginBottom: "2%" }}>
-                                        <TextField id="outlined-basic" label="Product Name" variant="outlined" color="light" name="name" />
+                                        <TextField id="outlined-basic" label="Product Name" variant="outlined" color="light" name="name"/>
                                     </Stack>
 
                                     <Stack sx={{ width: "49%", marginBottom: "2%" }}>
@@ -164,7 +171,7 @@ function AllProducts() {
                                     </Stack>
 
                                     <Stack sx={{ width: "49%", marginBottom: "2%" }}>
-                                        <TextField id="outlined-basic" label="$ Price" variant="outlined" color="blue" name="category" />
+                                        <TextField id="outlined-basic" label="$ Price" variant="outlined" color="blue" name="price" />
                                     </Stack>
 
                                     <Stack sx={{ width: "49%", marginBottom: "2%" }}>
@@ -224,12 +231,14 @@ function AllProducts() {
                                                 },
                                             }}
                                         >
+
                                             Update
                                         </Button>
                                     </Stack>
                                 </Stack>
                             </Stack>
                         </Modal>
+
                     </Stack>
 
                 </Stack>
