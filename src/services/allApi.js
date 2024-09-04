@@ -15,3 +15,9 @@ export const addProductApi = async(reqBody, reqHeader)=>{
 export const allProductApi = async()=>{
     return await commonApi('GET',`${serverUrl}/allproducts`,"","")
 }
+
+//delete product api
+
+export const deleteProductApi = async(id)=>{
+    return await commonApi('DELETE',`${serverUrl}/delete/${id}`,{},"")
+}

@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import {  Stack, TextField } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
-import { allProductApi } from '../services/allApi';
+import { allProductApi, deleteProductApi } from '../services/allApi';
 import { serverUrl } from '../services/serverUrl';
 
 
@@ -17,6 +17,7 @@ import { serverUrl } from '../services/serverUrl';
 function AllProducts() {
     //show
     const [allProducts, setAllProducts] = useState([])
+    const [deleteStatus, setDeleteStatus] = useState(false) //auto refresh
 
 
     //get products
@@ -25,6 +26,7 @@ function AllProducts() {
         setAllProducts(result.data);
     }
 
+   
 
 
     //modal start
@@ -35,9 +37,23 @@ function AllProducts() {
     const handleClose = () => {
         setOpen(false);
     };
+
+     //delete products
+     const handleDelete =async(id)=>{
+        const result = await deleteProductApi(id)
+        console.log(result);
+        if(result.status ==200){
+            setDeleteStatus(true)
+        }
+        
+
+    }
+
     useEffect(() => {
         getHomeProducts()
-    }, []); 
+        setDeleteStatus(false) //refresh
+
+    }, [deleteStatus]); 
     //modal end  
 
     return (
@@ -96,8 +112,8 @@ function AllProducts() {
 
                                     </CardContent>
                                     <CardActions style={{ backgroundColor: "#a3706b96" }}>
-                                        <Button size="small" className='me-4 text-light' onClick={handleOpen} >Edit</Button>
-                                        <Button size="small" className='p-1 text-light' >Delete</Button>
+                                        <Button size="small" type='button' className='me-4 text-light' onClick={handleOpen} >Edit</Button>
+                                        <Button size="small" type='button' className='p-1 text-light' onClick={()=>handleDelete(item?._id)} >Delete</Button>
                                     </CardActions>
                                 </Card>
                             ))
