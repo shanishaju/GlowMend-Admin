@@ -17,7 +17,7 @@ function AddProduct() {
     const imageHandler = (e) => {
         console.log(e.target.files[0]);
         setProductDetails({ ...productDetails, productImage: e.target.files[0] });
-    }
+    } 
 
     //cancel button
     const handleCancel = () => {

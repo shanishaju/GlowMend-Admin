@@ -4,62 +4,93 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { ListItemIcon, selectClasses, Stack, TextField } from '@mui/material';
+import { Stack, TextField } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
-import { allProductApi, deleteProductApi } from '../services/allApi';
+import { allProductApi, deleteProductApi, editProjectApi } from '../services/allApi';
 import { serverUrl } from '../services/serverUrl';
 
-
-
-
-
 function AllProducts() {
-    //show
-    const [allProducts, setAllProducts] = useState([])
-    const [deleteStatus, setDeleteStatus] = useState(false) //auto refresh
+    // State to store all products
+    const [allProducts, setAllProducts] = useState([]);
+    const [deleteStatus, setDeleteStatus] = useState(false); // auto refresh after delete
+    const [updateStatus, setupdateStatus] = useState(false); // auto refresh after update
 
 
+    // State to manage edit product data
+    const [editProduct, setEditProduct] = useState({
+        id: '', 
+        productName: '', 
+        category: '', 
+        price: '', 
+        description: '', 
+        productImage: ''
+    });
 
-    //get products
+    // Modal state
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    // Fetch all products from the server
     const getHomeProducts = async () => {
-        const result = await allProductApi()
+        const result = await allProductApi();
         setAllProducts(result.data);
-    }
-    //modal start
-    const [open, setOpen] = React.useState(false)
-    const handleOpen = () => {
-        setOpen(true);
-    };
-    const handleClose = () => {
-        setOpen(false);
     };
 
-    //delete products
+    // Handle delete product
     const handleDelete = async (id) => {
-        const result = await deleteProductApi(id)
-        if (result.status == 200) {
-            setDeleteStatus(true)
+        const result = await deleteProductApi(id);
+        if (result.status === 200) {
+            setDeleteStatus(true);
+        }
+    };
+
+    // Handle edit button click
+    const handleEdit = (selectedItem) => {
+        setEditProduct({
+            id: selectedItem._id, // Ensure this is the correct id field
+            productName: selectedItem.productName,
+            category: selectedItem.category,
+            price: selectedItem.price,
+            description: selectedItem.description,
+            productImage: selectedItem.productImage
+        });
+        handleOpen(); 
+    };
+
+    // Handle update button
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+
+        const { productName, category, price, description, productImage } = editProduct;
+
+        // Check if all fields are filled
+        if (!productName || !category || !price || !description || !productImage) {
+            alert("Please fill all the fields");
+            return;
         }
 
-
-    }
-
-    //edit
-    const [edit, setEdit] = useState()
-    const handleEdit = (selectedItem) => {
-        setEdit(selectedItem)
-        console.log(selectedItem);
-        
-
-    }
+        try {
+            const result = await editProjectApi(editProduct.id, editProduct);
+            if (result.status === 200) {
+                alert("Update completed");
+                handleClose(); // Close modal on success
+                setupdateStatus(true)
+            } else {
+                alert("Update failed. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error updating product:", error);
+            alert("An error occurred while updating the product.");
+        }
+    };
 
     useEffect(() => {
-        getHomeProducts()
-        setDeleteStatus(false) //refresh
-
-
-    }, [deleteStatus]);
+        getHomeProducts();
+        setDeleteStatus(false); // Refresh after delete
+        setupdateStatus(false)
+    }, [deleteStatus,updateStatus]);
     //modal end  
 
     return (
@@ -119,7 +150,7 @@ function AllProducts() {
 
                                     </CardContent>
                                     <CardActions style={{ backgroundColor: "#a3706b96" }}>
-                                        <Button size="small" type='button' className='me-4 text-light' onClick={()=>{handleEdit(item); handleOpen()}}  >Edit</Button>
+                                        <Button size="small" type='button' className='me-4 text-light' onClick={() => { handleEdit(item); handleOpen() }}  >Edit</Button>
                                         <Button size="small" type='button' className='p-1 text-light' onClick={() => handleDelete(item?._id)} >Delete</Button>
                                     </CardActions>
                                 </Card>
@@ -149,7 +180,7 @@ function AllProducts() {
                                     pt: 2,
                                     px: 4,
                                     pb: 3,
-                                    
+
                                 }}
                             >
                                 <p className='text-light ms-4 mt-3' style={{ fontSize: "32px", fontWeight: "bold" }} >Update Product</p>
@@ -161,21 +192,21 @@ function AllProducts() {
                                         justifyContent: "space-between",
                                     }}
                                 >
- 
+
                                     <Stack sx={{ width: "49%", marginBottom: "2%" }}>
-                                        <TextField id="outlined-basic" label="Product Name" variant="outlined" color="light" name="name"/>
+                                        <TextField id="outlined-basic" label="Product Name" variant="outlined" color="light" name="name" value={editProduct.productName} onChange={(e) => setEditProduct({ ...editProduct, productName: e.target.value })} />
                                     </Stack>
 
                                     <Stack sx={{ width: "49%", marginBottom: "2%" }}>
-                                        <TextField id="outlined-basic" label="Category" variant="outlined" color="blue" name="category" />
+                                        <TextField id="outlined-basic" label="Category" variant="outlined" color="blue" name="category" value={editProduct.category} onChange={(e) => setEditProduct({ ...editProduct, category: e.target.value })} />
                                     </Stack>
 
                                     <Stack sx={{ width: "49%", marginBottom: "2%" }}>
-                                        <TextField id="outlined-basic" label="$ Price" variant="outlined" color="blue" name="price" />
+                                        <TextField id="outlined-basic" label="$ Price" variant="outlined" color="blue" name="price" value={editProduct.price} onChange={(e) => setEditProduct({ ...editProduct, price: e.target.value })} />
                                     </Stack>
 
                                     <Stack sx={{ width: "49%", marginBottom: "2%" }}>
-                                        <TextField id="outlined-basic" label="Description" variant="outlined" color="blue" name="description" />
+                                        <TextField id="outlined-basic" label="Description" variant="outlined" color="blue" name="description" value={editProduct.description} onChange={(e) => setEditProduct({ ...editProduct, description: e.target.value })} />
                                     </Stack>
 
                                     <Stack sx={{ flexDirection: "row" }}>
@@ -195,12 +226,14 @@ function AllProducts() {
                                                 <img
                                                     className="m-4"
                                                     src="../src/assets/uploadRemovebg.png"
+
+
                                                     alt="addprodut-thumbnail"
                                                     width="30%"
                                                 />
                                             </label>
                                             <input
-                                                // onChange={imageHandler}
+                                                // onChange={(e)=>handleUpload()}
                                                 type="file"
                                                 name="image"
                                                 id="file-upload"
@@ -230,6 +263,7 @@ function AllProducts() {
                                                     color: "#fff",
                                                 },
                                             }}
+                                            onClick={handleUpdate}
                                         >
 
                                             Update
