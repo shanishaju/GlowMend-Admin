@@ -108,7 +108,7 @@ function AllProducts() {
                     <Stack
                         sx={{
                             flexDirection: "row",
-                            padding: "30px",
+                            padding: "30px", 
                             flexWrap: "wrap",
 
                         }}>
@@ -118,7 +118,7 @@ function AllProducts() {
                                 <Card
                                     key={item.id}
                                     sx={{
-                                        maxWidth: 250, marginRight: "20px", marginTop: "10px"
+                                        maxWidth: 250, marginRight: "20px", marginTop: "20px"
                                     }}>
                                     <CardMedia
                                         sx={{ height: 150 }}
