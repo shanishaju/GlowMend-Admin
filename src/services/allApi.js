@@ -14,7 +14,7 @@ export const addProductApi = async(reqBody, reqHeader)=>{
 
 //get product api
 export const allProductApi = async()=>{
-    return await commonApi('GET',`${serverUrl}/allproducts`,"","")
+    return await commonApi('GET',`${serverUrl}/adminallproducts`,"","")
 }
 
 //delete product api
