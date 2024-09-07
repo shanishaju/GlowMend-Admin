@@ -37,7 +37,7 @@ function Sidebar() {
                         <Item className='rounded-4  text-light ' style={{ marginTop: "-20px" }}> <FontAwesomeIcon icon={faBagShopping} style={{color: "#fafafa",}} className='me-2'  /> View Orders</Item>
                     </Link>
                     <Link className='rounded-4' to={'/reviews'} style={{ textDecoration: "none", backgroundColor: "#a3706b96" }}>
-                        <Item className='rounded-4  text-light ' style={{ marginTop: "-20px" }}><FontAwesomeIcon icon={faMessage} style={{color: "#fafafa",}} className='me-2'/> Manage Reviews </Item>
+                        <Item className='rounded-4  text-light ' style={{ marginTop: "-20px" }}><FontAwesomeIcon icon={faMessage} style={{color: "#fafafa",}} className='me-2'/> Manage Comments </Item>
                     </Link>
                     {/* <Link className='rounded-4' to={'/products'} style={{ textDecoration: "none", backgroundColor: "#a3706b96" }}>
                         <Item className='rounded-4  text-light ' style={{ marginTop: "-20px" }}> Add Item </Item>

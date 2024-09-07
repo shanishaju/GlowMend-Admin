@@ -27,3 +27,8 @@ export const deleteProductApi = async(id)=>{
 export const editProjectApi = async (id, reqBody) => {
     return await commonApi('PUT', `${serverUrl}/editproject/${id}`, reqBody, "")
 }
+
+//get Comments
+export const allCommentsApi = async()=>{
+    return await commonApi('GET',`${serverUrl}/getcontact`,"","")
+}

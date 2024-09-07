@@ -92,7 +92,7 @@ function AllProducts() {
         setupdateStatus(false)
     }, [deleteStatus,updateStatus]);
     //modal end  
-
+     
     return (
         <div className='ms-5 me-5 rounded-4 ' style={{ width: "80%", backgroundColor: "", height: "auto" }}>
             <Stack>
