@@ -8,7 +8,7 @@ function Header() {
     <>
       <div className='pt-5 pb-4 d-flex justify-content-between' style={{Height:"70px", backgroundColor:"#76453fee"}}>
         <img className='ms-4' src={logo} alt=""  style={{width:"15%", height:"100%"}}/>
-        <button className='me-5 btn' style={{backgroundColor:"none"}}><FontAwesomeIcon className='fs-3' icon={faPowerOff} style={{color: "#fbfcfe",}} /></button>
+        {/* <button className='me-5 btn' style={{backgroundColor:"none"}}><FontAwesomeIcon className='fs-3' icon={faPowerOff} style={{color: "#fbfcfe",}} /></button> */}
       </div>
     </>
   )
